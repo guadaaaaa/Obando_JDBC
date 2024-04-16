@@ -25,8 +25,8 @@ import java.io.IOException;
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
-//        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("register-view.fxml"));
+//        Scene scene = new Scene(fxmlLoader.load(), 320, 240);q
 //        stage.setTitle("Hello!");
 //        stage.setScene(scene);
 
@@ -49,6 +49,7 @@ public class HelloApplication extends Application {
         TextField tfUsername = new TextField();
         grid.add(tfUsername, 1, 1);
         tfUsername.setFont(Font.font(30));
+        tfUsername.setId("txtUsername");
 //        tfUsername.setMaxWidth(150);
 
         Label lbPassword = new Label("Password");
@@ -59,6 +60,7 @@ public class HelloApplication extends Application {
         PasswordField pfPassword = new PasswordField();
         pfPassword.setFont(Font.font(30));
         grid.add(pfPassword, 1, 2);
+        pfPassword.setId("txtPassword");
 
         TextField tmpPassword = new TextField(pfPassword.getText());
         tmpPassword.setFont(Font.font(30));
@@ -98,20 +100,53 @@ public class HelloApplication extends Application {
         btnShow.setOnMouseExited(release);
         grid.add(btnShow, 2,2);
 
-        Button btnLogin = new Button("Log In");
-        btnLogin.setFont(Font.font(40));
-        grid.add(btnLogin, 0, 3, 2, 1);
+        Button btnRegister = new Button("Register");
+        btnRegister.setFont(Font.font(40));
+        grid.add(btnRegister, 0, 3, 2, 1);
 
-        btnLogin.setOnAction(new EventHandler<ActionEvent>() {
+        Button btnLogIn = new Button("Log In");
+        btnLogIn.setFont(Font.font(40));
+        grid.add(btnLogIn, 0, 4, 2, 1);
+
+        Text txtError = new Text();
+        txtError.setFill(Color.RED);
+
+        btnRegister.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                HelloController hc = new HelloController();
                 System.out.println("Hello");
                 try {
+                    String name = tfUsername.getText();
+                    String pass = pfPassword.getText();
+                    hc.InsertData(name,pass);
                     Parent p = FXMLLoader.load(getClass().getResource("homepage.fxml"));
                     Scene s = new Scene(p);
                     stage.setScene(s);
                     stage.show();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        btnLogIn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                HelloController hc = new HelloController();
+                try{
+                    String name = tfUsername.getText();
+                    String pass = pfPassword.getText();
+                    boolean res = hc.ReadData(name,pass);
+                    if(res){
+                        Parent p = FXMLLoader.load(getClass().getResource("homepage.fxml"));
+                        Scene s = new Scene(p);
+                        stage.setScene(s);
+                        stage.show();
+                    } else {
+                        txtError.setText("Log In Error! Register Instead");
+                    }
+                } catch (IOException e){
                     e.printStackTrace();
                 }
             }
