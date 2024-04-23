@@ -16,6 +16,9 @@ public class HelloController {
     public GridPane pnLogin;
     public AnchorPane pnMain;
     public VBox pnHome;
+    public static int CurrentID;
+    public static String CurrentName;
+
     @FXML
     private Label welcomeText;
 
@@ -23,14 +26,30 @@ public class HelloController {
     protected void onHelloButtonClick() {
         welcomeText.setText("Welcome to JavaFX Application!");
     }
+
     @FXML
-    protected void onSigninClick() throws IOException {
-        Parent homeview = FXMLLoader.load(HelloApplication.class
-                .getResource("home-view.fxml"));
-        AnchorPane p = (AnchorPane) pnLogin.getParent();
-        p.getChildren().remove(pnLogin);
-        p.getChildren().add(homeview);
+    public void CreateTableUsers(){
+        Connection c = MySQLConnection.getConnection();
+        String query = "CREATE TABLE tblusers (" +
+                "id INT PRIMARY KEY AUTO_INCREMENT," +
+                "name VARCHAR(50) NOT NULL," +
+                "password VARCHAR(100) NOT NULL)";
+        try {
+            Statement statement = c.createStatement();
+            statement.execute(query);
+            System.out.println("Table Created Successfully");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                c.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
+
+
 
     @FXML
     public void InsertData(String name, String password){
@@ -42,8 +61,9 @@ public class HelloController {
             statement.setString(2,password);
             int rowsInserted = statement.executeUpdate();
             System.out.println("Rows inserted: "+rowsInserted);
+            ReadData(name,password);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
@@ -59,6 +79,8 @@ public class HelloController {
                 int id = res.getInt("id");
                 System.out.println("ID: " + id + "\nName:" + currName + "\nPassword: " + currPass);
                 if(name.equals(currName) && password.equals(currPass)){
+                    CurrentName = currName;
+                    CurrentID = id;
                     return true;
                 }
             }

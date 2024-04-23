@@ -25,19 +25,14 @@ import java.io.IOException;
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-//        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("register-view.fxml"));
-//        Scene scene = new Scene(fxmlLoader.load(), 320, 240);q
-//        stage.setTitle("Hello!");
-//        stage.setScene(scene);
+        HomeController hc1 = new HomeController();
 
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         Text txtWelcome = new Text("Welcome to CIT");
         txtWelcome.setFont(Font.font("Chiller", FontWeight.EXTRA_BOLD, 69));
         txtWelcome.setFill(Color.RED);
-//        grid.setAlignment();
         grid.setPadding(new Insets(20));
-//        grid.
         txtWelcome.setTextAlignment(TextAlignment.CENTER);
         grid.add(txtWelcome, 0, 0, 3, 1);
 
@@ -50,7 +45,6 @@ public class HelloApplication extends Application {
         grid.add(tfUsername, 1, 1);
         tfUsername.setFont(Font.font(30));
         tfUsername.setId("txtUsername");
-//        tfUsername.setMaxWidth(150);
 
         Label lbPassword = new Label("Password");
         lbPassword.setFont(Font.font(30));
@@ -68,18 +62,6 @@ public class HelloApplication extends Application {
         tmpPassword.setVisible(false);
 
         ToggleButton btnShow = new ToggleButton("( )");
-//        btnShow.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent actionEvent) {
-//                if (btnShow.isSelected()) {
-//                    tmpPassword.setText(pfPassword.getText());
-//                    tmpPassword.setVisible(true);
-//                } else {
-//                    tmpPassword.setVisible(false);
-//                    pfPassword.setText(tmpPassword.getText());
-//                }
-//            }
-//        });
         btnShow.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
